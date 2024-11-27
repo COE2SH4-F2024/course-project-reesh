@@ -8,8 +8,10 @@ GameMechs::GameMechs()
     loseFlag=false;
     score=0;
 
-    boardSizeX=20;
-    boardSizeY=10;
+    game_speed = NORMAL;
+
+    boardSizeX=30;
+    boardSizeY=15;
     
 }
 
@@ -19,6 +21,8 @@ GameMechs::GameMechs(int boardX, int boardY)
     exitFlag=false;
     loseFlag=false;
     score=0;
+
+    game_speed = NORMAL;
 
     boardSizeX=boardX;
     boardSizeY=boardY;
@@ -39,29 +43,25 @@ bool GameMechs::getExitFlagStatus() const
 
 bool GameMechs::getLoseFlagStatus() const
 {
-
+    return loseFlag;
 }
     
 
 char GameMechs::getInput() 
 {
-    if (MacUILib_hasChar()){
-        input=MacUILib_getChar();
-    }
-    if (input==' '){
-        exitFlag = true;
-    }
+
     return input;
 }
 
 int GameMechs::getScore() const
 {
+    return score;
 
 }
 
 void GameMechs::incrementScore()
 {
-    
+    score++;
 }
 
 int GameMechs::getBoardSizeX() const
@@ -75,6 +75,54 @@ int GameMechs::getBoardSizeY() const
 }
 
 
+GameMechs::SPEEDState GameMechs::getGameSpeed() const {
+    
+    return game_speed;
+
+}
+
+void GameMechs::setGameSpeed(SPEEDState speed){
+    
+    game_speed = speed;
+
+}
+
+
+void GameMechs::increaseGameSpeed(){
+    if (game_speed < VERY_FAST){
+        game_speed = (SPEEDState)(game_speed + 1);;
+    }
+    else {
+        game_speed = VERY_SLOW; 
+    }
+} 
+
+void GameMechs::decreaseGameSpeed(){
+    if (game_speed>VERY_SLOW){
+        game_speed = (SPEEDState)(game_speed - 1);
+    }
+    else{
+        game_speed = VERY_FAST;
+    }
+}
+
+int GameMechs::getDelay() const {
+    switch (game_speed) {
+        case VERY_SLOW:
+            return 1000000;
+        case SLOW:
+            return 500000; 
+        case NORMAL:
+            return 300000;
+        case FAST:
+            return 100000;  
+        case VERY_FAST:
+            return 70000; 
+        default:
+            return 300000;   
+    }
+}
+
 void GameMechs::setExitTrue()
 {
     exitFlag= true;
@@ -82,17 +130,17 @@ void GameMechs::setExitTrue()
 
 void GameMechs::setLoseFlag()
 {
-    
+    loseFlag=true;
 }
 
 void GameMechs::setInput(char this_input)
 {
-
+    input=this_input;
 }
 
 void GameMechs::clearInput()
 {
-
+    input=0;
 }
 
 // More methods should be added here

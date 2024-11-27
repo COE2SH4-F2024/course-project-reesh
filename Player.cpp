@@ -45,7 +45,7 @@ void Player::updatePlayerDir()
                 }
                 break;
             case 's':
-                if (myDir ==STOP|myDir== LEFT|| myDir==RIGHT){
+                if (myDir ==STOP||myDir== LEFT|| myDir==RIGHT){
                     myDir=DOWN;   
                 }
                 break;
@@ -55,13 +55,28 @@ void Player::updatePlayerDir()
                     
                 }
                 break;
-            // Add more key processing here
-            // Add more key processing here
-            // Add more key processing here    
+
+        
             default:
+                
                 break;
         }         
 }
+
+void Player::updatePlayerSpeed() {
+    char input = mainGameMechsRef->getInput();
+    switch (input) {
+        case '+': 
+            mainGameMechsRef->increaseGameSpeed();
+            break;
+        case '-': 
+            mainGameMechsRef->decreaseGameSpeed();
+            break;
+        default:
+            break;
+    }
+}
+
 
 void Player::movePlayer()
 {
@@ -81,7 +96,7 @@ void Player::movePlayer()
              if (playerPos.pos->y >= mainGameMechsRef->getBoardSizeY()-1){
                 playerPos.pos->y= 1;
              }
-        break;
+        break; 
 
         case LEFT:
             playerPos.pos->x--;
@@ -96,6 +111,15 @@ void Player::movePlayer()
                 playerPos.pos->x=1;
             }
         break;
+
+        default:
+            // When an invalid input is entered
+            myDir = STOP; // Set direction to STOP
+            playerPos.pos->x = 11; // Reset player position to (11, 5)
+            playerPos.pos->y = 5;
+            break;
+
+
     }
 }
 

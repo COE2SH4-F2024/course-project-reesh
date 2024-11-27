@@ -25,6 +25,7 @@ class Player
         void movePlayer();
 
         // More methods to be added here
+        void updatePlayerSpeed();
         
 
     private:

@@ -20,9 +20,13 @@ class GameMechs
         int boardSizeX;
         int boardSizeY;
 
-        objPos food;
+        
+
 
     public:
+        enum SPEEDState { VERY_SLOW = 0, SLOW = 1, NORMAL = 2, FAST = 3, VERY_FAST = 4 };  // Speed states
+        SPEEDState game_speed;
+        
         GameMechs();
         GameMechs(int boardX, int boardY);
         ~GameMechs(); // is this one needed at all? Why or why not?
@@ -38,9 +42,17 @@ class GameMechs
 
         int getBoardSizeX() const;
         int getBoardSizeY() const;
+
+        SPEEDState getGameSpeed() const;
+        void setGameSpeed(SPEEDState speed);
+        void increaseGameSpeed(); 
+        void decreaseGameSpeed();
+        int getDelay() const;
+
         
         int getScore() const;
         void incrementScore();
+
         
         // More methods should be added here
 };
