@@ -10,8 +10,8 @@ GameMechs::GameMechs()
 
     game_speed = NORMAL;
 
-    boardSizeX=30;
-    boardSizeY=15;
+    boardSizeX=20;
+    boardSizeY=10;
     
 }
 
