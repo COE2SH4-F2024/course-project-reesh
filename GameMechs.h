@@ -6,6 +6,7 @@
 
 #include "objPos.h"
 #include "objPosArrayList.h"
+#include "Food.h"
 
 using namespace std;
 
@@ -20,8 +21,7 @@ class GameMechs
         int boardSizeX;
         int boardSizeY;
 
-        
-
+        objPos food;
 
     public:
         enum SPEEDState { VERY_SLOW = 0, SLOW = 1, NORMAL = 2, FAST = 3, VERY_FAST = 4 };  // Speed states
@@ -36,7 +36,7 @@ class GameMechs
         bool getLoseFlagStatus() const;
         void setLoseFlag();
 
-        char getInput();
+        char getInput() const;
         void setInput(char this_input);
         void clearInput();
 

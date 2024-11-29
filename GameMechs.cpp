@@ -10,8 +10,8 @@ GameMechs::GameMechs()
 
     game_speed = NORMAL;
 
-    boardSizeX=30;
-    boardSizeY=15;
+    boardSizeX=20;
+    boardSizeY=10;
     
 }
 
@@ -33,7 +33,6 @@ GameMechs::GameMechs(int boardX, int boardY)
 // do you need a destructor?
 GameMechs::~GameMechs()
 {
-    //not rn
 }
 
 bool GameMechs::getExitFlagStatus() const
@@ -47,7 +46,7 @@ bool GameMechs::getLoseFlagStatus() const
 }
     
 
-char GameMechs::getInput() 
+char GameMechs::getInput() const
 {
 
     return input;
@@ -122,6 +121,7 @@ int GameMechs::getDelay() const {
             return 300000;   
     }
 }
+
 
 void GameMechs::setExitTrue()
 {

@@ -1,9 +1,11 @@
 #include <iostream>
 #include "MacUILib.h"
 #include "objPos.h"
+#include <time.h>
 
 #include "Player.h"
 #include"GameMechs.h"
+#include "Food.h"
 
 using namespace std;
 
@@ -13,8 +15,7 @@ int i,j,p;
 char input;
 Player *myPlayer;//pointer to a Player object
 GameMechs *myGM;
-
-
+Food *food;
 
 
 void Initialize(void);
@@ -50,10 +51,12 @@ void Initialize(void)
     MacUILib_clearScreen();
 
     myGM = new GameMechs();//defualt one so always created as 20X10
-    myPlayer = new Player(myGM);
-    
+    food = new Food(myGM);
+    myPlayer = new Player(myGM,food);
 
-    
+    srand(time(NULL)); 
+
+    food->generateFood(myPlayer->getPlayerPos());
 }
 
 void GetInput(void)
@@ -63,29 +66,41 @@ void GetInput(void)
         myGM->setInput(MacUILib_getChar());  
     }
    
-   else
-   {
+   else {
         myGM->clearInput();
-   }
+    }
+
 }
+
 
 void RunLogic(void)
 {
     input = myGM->getInput();
 
-    if (input == '+' || input == '-') {
-        myPlayer->updatePlayerSpeed();
-    } 
-    if (input == ' ') {
-        myGM->setExitTrue();
-    } 
-    
-    if (input=='$'){
-        myGM->incrementScore();
+    switch (input) {
+        case '+':
+        case '-':
+            myPlayer->updatePlayerSpeed();
+            break;
+        
+        case ' ':
+            myGM->setExitTrue();
+            break;
+        
+        case '$':
+            myGM->incrementScore();
+            break;
+        
+        case 'l':
+            myGM->setLoseFlag();
+            break;
 
-    }
-    if (input == 'l') { 
-        myGM->setLoseFlag();
+        case 'f':
+            food->generateFood(myPlayer->getPlayerPos());
+            break;
+
+        default:
+            break;  // Default case if no match is found (optional)
     }
 
         myPlayer->updatePlayerDir();  
@@ -93,7 +108,7 @@ void RunLogic(void)
 
       
         myGM->clearInput();
-    }
+}
 
    
 
@@ -102,22 +117,30 @@ void DrawScreen(void)
     MacUILib_clearScreen();
     MacUILib_printf("Use WASD to move & spacebar to exit\n\n");
     
+    int boardX=myGM-> getBoardSizeX();
+    int boardY=myGM-> getBoardSizeY();
 
     objPos playerPos = myPlayer->getPlayerPos();
 
-
-    for (i=0; i<10; i++){
-        for (j=0; j<20; j++){
+    objPos foodPos = food->getFoodPos();
+    
+    for (i=0; i<boardY; i++){
+        for (j=0; j<boardX; j++){
             
-            if (i==0|| i==9|| j==0|| j==19){
+            if (i==0|| i==boardY-1|| j==0|| j==boardX-1){
                 MacUILib_printf("#");
             }
 
             else if (i== playerPos.pos->y  && j== playerPos.pos->x){
                 MacUILib_printf("%c",playerPos.symbol);
             }
+            
+            else if (i == foodPos.pos->y && j == foodPos.pos->x) {
+                MacUILib_printf("%c", foodPos.symbol); 
+            }
+
             else{
-                MacUILib_printf(" ");
+                MacUILib_printf("%c",' ');
             }
 
             
@@ -148,6 +171,7 @@ void DrawScreen(void)
         default:
             break;
     }
+    MacUILib_printf("\nFood Position: %d, %d ", foodPos.pos->x, foodPos.pos->y);
 
     if (myGM->getLoseFlagStatus()) {
         MacUILib_printf("\nLose flag is TRUE");
@@ -167,12 +191,13 @@ void DrawScreen(void)
     
 }
 
+
+
 void LoopDelay(void)
 {
     MacUILib_Delay(myGM->getDelay());
     
 }
-
 
 void CleanUp(void)
 {
@@ -180,6 +205,9 @@ void CleanUp(void)
 
     delete myPlayer;
     myPlayer = nullptr;
+
+    delete food;
+    food = nullptr;
 
     delete myGM;
     myGM = nullptr;
