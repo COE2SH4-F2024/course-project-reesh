@@ -7,10 +7,12 @@ Player::Player(GameMechs* thisGMRef, Food* thisFoodRef)
     mainFoodRef = thisFoodRef;
     myDir = STOP;
 
+    playerPosList = new objPosArrayList();
     // more actions to be included
-    playerPos.pos->x = mainGameMechsRef->getBoardSizeX()/2;
-    playerPos.pos->y= mainGameMechsRef->getBoardSizeY()/2;
-    playerPos.symbol= '@';
+    objPos HPos(mainGameMechsRef->getBoardSizeX()/2, mainGameMechsRef->getBoardSizeY()/2, '@'); 
+    // // playerPos.pos->y= mainGameMechsRef->getBoardSizeY()/2;
+    // // playerPos.symbol= '@';
+    playerPosList->insertHead(HPos);//MAKE SURE THIS LINE IS RIGHT
 
 
 }
@@ -20,12 +22,13 @@ Player::~Player()
 {
     // delete any heap members here
     //didnt say new anywhere for now 
+    delete playerPosList;
 }
 
-objPos Player::getPlayerPos() const
+objPosArrayList* Player::getPlayerPos() const
 {
     // return the reference to the playerPos arrray list
-    return playerPos;
+    return playerPosList;
 }
 
 void Player::updatePlayerDir()
@@ -81,47 +84,58 @@ void Player::updatePlayerSpeed() {
 
 void Player::movePlayer()
 {
+    //x-y coors for head
+   
+    //char Hsym= playerPosList->getHeadElement().getSymbol();
+
+    objPos playerPos= playerPosList->getHeadElement();
+    //x-y coors for head
+    int Hx= playerPos.pos->x;
+    int Hy= playerPos.pos->y;
     // PPA3 Finite State Machine logic
     updatePlayerDir();
     switch (myDir)
     {
         case UP:
-            playerPos.pos->y--;
-            if (playerPos.pos->y <=0){
-                playerPos.pos->y= mainGameMechsRef->getBoardSizeY()-2;
+            Hy--;
+            if (Hy <=0){
+                Hy= mainGameMechsRef->getBoardSizeY()-2;
             }
         break;
         
         case DOWN:
-             playerPos.pos->y++;
-             if (playerPos.pos->y >= mainGameMechsRef->getBoardSizeY()-1){
-                playerPos.pos->y= 1;
+             Hy++;
+             if (Hy >= mainGameMechsRef->getBoardSizeY()-1){
+                Hy= 1;
              }
         break; 
 
         case LEFT:
-            playerPos.pos->x--;
-            if (playerPos.pos->x <=0){
-                playerPos.pos->x= mainGameMechsRef->getBoardSizeX()-2;
+            Hx--;
+            if (Hx <=0){
+                Hx= mainGameMechsRef->getBoardSizeX()-2;
             }
         break;
 
         case RIGHT:
-            playerPos.pos->x++;
-            if(playerPos.pos->x >=mainGameMechsRef->getBoardSizeX()-1){
-                playerPos.pos->x=1;
+            Hx++;
+            if(Hx >=mainGameMechsRef->getBoardSizeX()-1){
+                Hx=1;
             }
         break;
 
         default:
             // When an invalid input is entered
             myDir = STOP; // Set direction to STOP
-            playerPos.pos->x = 11; // Reset player position to (11, 5)
-            playerPos.pos->y = 5;
+           // playerPos.pos->x = 11; // Reset player position to (11, 5)
+            //playerPos.pos->y = 5;
             break;
 
 
     }
+    objPos Hnew(Hx,Hy,'@');
+    playerPosList->insertHead(Hnew);
+    playerPosList->removeTail();
 }
 
 // More methods to be added

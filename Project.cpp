@@ -75,6 +75,7 @@ void GetInput(void)
 
 void RunLogic(void)
 {
+    objPosArrayList* playerPos = myPlayer->getPlayerPos();//NEW
     input = myGM->getInput();
 
     switch (input) {
@@ -120,7 +121,7 @@ void DrawScreen(void)
     int boardX=myGM-> getBoardSizeX();
     int boardY=myGM-> getBoardSizeY();
 
-    objPos playerPos = myPlayer->getPlayerPos();
+    objPosArrayList* playerPosList = myPlayer->getPlayerPos();//NEW
 
     objPos foodPos = food->getFoodPos();
     
@@ -131,9 +132,10 @@ void DrawScreen(void)
                 MacUILib_printf("#");
             }
 
-            else if (i== playerPos.pos->y  && j== playerPos.pos->x){
-                MacUILib_printf("%c",playerPos.symbol);
-            }
+            // else if (i== playerPos.pos->y  && j== playerPos.pos->x){
+            //     MacUILib_printf("%c",playerPos.symbol);
+            // }
+            //change to print whole snake now i think
             
             else if (i == foodPos.pos->y && j == foodPos.pos->x) {
                 MacUILib_printf("%c", foodPos.symbol); 
