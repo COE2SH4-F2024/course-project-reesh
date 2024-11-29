@@ -50,7 +50,7 @@ void Initialize(void)
     MacUILib_init();
     MacUILib_clearScreen();
 
-    myGM = new GameMechs();//defualt one so always created as 20X10
+    myGM = new GameMechs();
     food = new Food(myGM);
     myPlayer = new Player(myGM,food);
 
