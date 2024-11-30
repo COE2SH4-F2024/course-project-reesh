@@ -61,7 +61,7 @@ void Initialize(void)
 
 void GetInput(void)
 {
-//do we need now...
+
     if (MacUILib_hasChar()) { 
         myGM->setInput(MacUILib_getChar());  
     }
@@ -75,7 +75,7 @@ void GetInput(void)
 
 void RunLogic(void)
 {
-    objPosArrayList* playerPos = myPlayer->getPlayerPos();//NEW
+    
     input = myGM->getInput();
 
     switch (input) {
@@ -120,30 +120,43 @@ void DrawScreen(void)
     
     int boardX=myGM-> getBoardSizeX();
     int boardY=myGM-> getBoardSizeY();
-
-    objPosArrayList* playerPosList = myPlayer->getPlayerPos();//NEW
+    
+    objPosArrayList* snake = myPlayer->getPlayerPos();//3A, "snake" is playerPosList, just initated with a new name here
+    int snakesize = snake->getSize();//3A
 
     objPos foodPos = food->getFoodPos();
     
     for (i=0; i<boardY; i++){
         for (j=0; j<boardX; j++){
-            
-            if (i==0|| i==boardY-1|| j==0|| j==boardX-1){
-                MacUILib_printf("#");
-            }
+             int isSnake=0;
 
-            // else if (i== playerPos.pos->y  && j== playerPos.pos->x){
-            //     MacUILib_printf("%c",playerPos.symbol);
-            // }
-            //change to print whole snake now i think
-            
-            else if (i == foodPos.pos->y && j == foodPos.pos->x) {
-                MacUILib_printf("%c", foodPos.symbol); 
-            }
+//forloop just for snake printing-3A
+            for(int k=0; k<snakesize; k++){
+                objPos Bodypart = snake->getElement(k);
 
-            else{
-                MacUILib_printf("%c",' ');
+                if (i== Bodypart.pos->y  && j== Bodypart.pos->x)
+                {
+                    MacUILib_printf("%c",Bodypart.symbol);
+                    isSnake=1;
+                    break;
+                }
             }
+//back to normal printing where its not a snake part-3A
+            if (!isSnake)
+            {
+                if (i==0|| i==boardY-1|| j==0|| j==boardX-1){
+                    MacUILib_printf("#");
+                }
+                
+                else if (i == foodPos.pos->y && j == foodPos.pos->x) {
+                    MacUILib_printf("%c", foodPos.symbol); 
+                }
+
+                else{
+                    MacUILib_printf("%c",' ');
+                }
+            }
+            
 
             
         }
