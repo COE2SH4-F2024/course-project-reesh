@@ -134,8 +134,28 @@ void Player::movePlayer()
 
     }
     objPos Hnew(Hx,Hy,'@');
-    playerPosList->insertHead(Hnew);
-    playerPosList->removeTail();
+    
+
+    if (Hnew.pos->x == mainFoodRef->getFoodPos().pos->x &&
+        Hnew.pos->y == mainFoodRef->getFoodPos().pos->y){
+            playerPosList->insertHead(Hnew);
+            mainFoodRef->generateFood(*playerPosList);
+        
+    }
+    else {
+        playerPosList->insertHead(Hnew);
+        playerPosList->removeTail();
+    }
+
+    int snakeSize = playerPosList->getSize();
+
+        if (snakeSize > 0){
+            mainGameMechsRef->setScore(snakeSize - 1);
+        }
+        else{
+            mainGameMechsRef->setScore(0);
+        }
 }
 
 // More methods to be added
+

@@ -28,7 +28,7 @@ class Player
 
         // More methods to be added here
         void updatePlayerSpeed();
-        
+
 
     private:
         objPosArrayList* playerPosList;//new replaced

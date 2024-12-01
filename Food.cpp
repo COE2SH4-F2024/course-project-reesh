@@ -17,11 +17,11 @@ Food::~Food()
 
 
 
-void Food::generateFood(objPosArrayList* blockOff)
+void Food::generateFood(objPosArrayList& blockOff)
 {
-    int randX;
+    int randX; 
     int randY;
-    int isValid = 0;
+    bool isValid = false;
     int xRange = mainGameMechsRef->getBoardSizeX() - 2;
     int yRange = mainGameMechsRef->getBoardSizeY() - 2;
 
@@ -29,12 +29,12 @@ void Food::generateFood(objPosArrayList* blockOff)
         randX = rand() % xRange + 1;
         randY = rand() % yRange + 1;
 
-        isValid = 1; 
+        isValid = true; 
 
-        for (int blockOffpos = 0; blockOffpos < blockOff->getSize(); ++blockOffpos) {
-            objPos currentPos = blockOff->getElement(blockOffpos); 
+        for (int blockOffpos = 0; blockOffpos < blockOff.getSize(); blockOffpos++) {
+            objPos currentPos = blockOff.getElement(blockOffpos); 
             if (randX == currentPos.pos->x && randY == currentPos.pos->y) {
-                isValid = 0; 
+                isValid = false; 
                 break;
             }
         }

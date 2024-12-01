@@ -7,6 +7,7 @@
 #include "objPos.h"
 #include "objPosArrayList.h"
 #include "Food.h"
+#include "Player.h"
 
 using namespace std;
 
@@ -51,7 +52,10 @@ class GameMechs
 
         
         int getScore() const;
+        void setScore(int newScore);
         void incrementScore();
+        void decrementScore();
+        
 
         
         // More methods should be added here

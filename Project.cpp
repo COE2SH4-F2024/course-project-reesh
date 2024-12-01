@@ -56,7 +56,7 @@ void Initialize(void)
 
     srand(time(NULL)); 
 
-    food->generateFood(myPlayer->getPlayerPos());
+    food->generateFood(*myPlayer->getPlayerPos());
 }
 
 void GetInput(void)
@@ -88,22 +88,13 @@ void RunLogic(void)
             myGM->setExitTrue();
             break;
         
-        case '$':
-            myGM->incrementScore();
-            break;
-        
         case 'l':
             myGM->setLoseFlag();
-            break;
-
-        case 'f':
-            food->generateFood(myPlayer->getPlayerPos());
             break;
 
         default:
             break;  // Default case if no match is found (optional)
     }
-
         myPlayer->updatePlayerDir();  
         myPlayer->movePlayer(); 
 
@@ -186,7 +177,6 @@ void DrawScreen(void)
         default:
             break;
     }
-    MacUILib_printf("\nFood Position: %d, %d ", foodPos.pos->x, foodPos.pos->y);
 
     if (myGM->getLoseFlagStatus()) {
         MacUILib_printf("\nLose flag is TRUE");
