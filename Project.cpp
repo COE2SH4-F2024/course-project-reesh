@@ -10,7 +10,7 @@
 using namespace std;
 
 
-
+const int LOOP_DELAY = 1000000; 
 int i,j,p;
 char input;
 Player *myPlayer;//pointer to a Player object
@@ -88,9 +88,6 @@ void RunLogic(void)
             myGM->setExitTrue();
             break;
         
-        case 'l':
-            myGM->setLoseFlag();
-            break;
 
         default:
             break;  // Default case if no match is found (optional)
@@ -178,9 +175,6 @@ void DrawScreen(void)
             break;
     }
 
-    if (myGM->getLoseFlagStatus()) {
-        MacUILib_printf("\nLose flag is TRUE");
-    }
             
 
     if (myGM->getLoseFlagStatus()==true && myGM->getExitFlagStatus() == true) {
@@ -190,7 +184,9 @@ void DrawScreen(void)
     
     else if(myGM->getLoseFlagStatus() == false && myGM->getExitFlagStatus() == true)
     {
-        MacUILib_printf("\nYay, you won! :)");
+
+        MacUILib_printf("\nGame Ended by Player");
+        MacUILib_Delay(LOOP_DELAY); 
     }
 
     

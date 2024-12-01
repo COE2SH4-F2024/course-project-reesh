@@ -7,6 +7,10 @@
 #include "objPos.h"
 #include "objPosArrayList.h"
 
+using namespace std;
+class GameMechs;
+class Food;
+
 class Player
 {
     // Construct the remaining declaration from the project manual.
