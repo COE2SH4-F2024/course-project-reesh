@@ -10,7 +10,7 @@
 using namespace std;
 
 
-const int LOOP_DELAY = 1000000; 
+const int LOOP_DELAY = 3000000; 
 int i,j,p;
 char input;
 Player *myPlayer;//pointer to a Player object
@@ -53,10 +53,11 @@ void Initialize(void)
     myGM = new GameMechs();
     food = new Food(myGM);
     myPlayer = new Player(myGM,food);
+    
 
     srand(time(NULL)); 
 
-    food->generateFood(*myPlayer->getPlayerPos());
+    food->generateFood(myPlayer->getPlayerPos());
 }
 
 void GetInput(void)
@@ -87,16 +88,16 @@ void RunLogic(void)
         case ' ':
             myGM->setExitTrue();
             break;
-        
 
         default:
             break;  // Default case if no match is found (optional)
     }
         myPlayer->updatePlayerDir();  
         myPlayer->movePlayer(); 
-
+    
       
         myGM->clearInput();
+        
 }
 
    
@@ -104,7 +105,7 @@ void RunLogic(void)
 void DrawScreen(void)
 {
     MacUILib_clearScreen();
-    MacUILib_printf("Use WASD to move & spacebar to exit\n\n");
+    MacUILib_printf("Use WASD to move & spacebar to exit!\nCollect the snake food. Grab the special food, $, for 10 BONUS points!\n\n");
     
     int boardX=myGM-> getBoardSizeX();
     int boardY=myGM-> getBoardSizeY();
@@ -112,7 +113,9 @@ void DrawScreen(void)
     objPosArrayList* snake = myPlayer->getPlayerPos();//3A, "snake" is playerPosList, just initated with a new name here
     int snakesize = snake->getSize();//3A
 
-    objPos foodPos = food->getFoodPos();
+    objPosArrayList* foodPosList = food->getFoodPos();
+    int foodListSize = foodPosList->getSize();
+
     
     for (i=0; i<boardY; i++){
         for (j=0; j<boardX; j++){
@@ -135,17 +138,23 @@ void DrawScreen(void)
                 if (i==0|| i==boardY-1|| j==0|| j==boardX-1){
                     MacUILib_printf("#");
                 }
-                
-                else if (i == foodPos.pos->y && j == foodPos.pos->x) {
-                    MacUILib_printf("%c", foodPos.symbol); 
+                else{
+                    bool foodFound = false;
+                    for (int foodI=0;foodI<foodListSize;foodI++){
+                        objPos foodPos = foodPosList->getElement(foodI);
+                        if (i == foodPos.pos->y && j == foodPos.pos->x){
+                            MacUILib_printf("%c", foodPos.symbol);
+                            foodFound = true;
+                            break;
+                        }
+                    }
+                    if (!foodFound){
+                        MacUILib_printf("%c",' ');
+                    }
                 }
 
-                else{
-                    MacUILib_printf("%c",' ');
-                }
             }
             
-
             
         }
         MacUILib_printf("\n");
@@ -178,14 +187,15 @@ void DrawScreen(void)
             
 
     if (myGM->getLoseFlagStatus()==true && myGM->getExitFlagStatus() == true) {
-        MacUILib_printf("\nYou lost the game :( ");
+        MacUILib_printf("\nOops, you lost the game! :( \nTry again, you can do it! :)");
+        MacUILib_Delay(LOOP_DELAY); 
     }  
 
     
     else if(myGM->getLoseFlagStatus() == false && myGM->getExitFlagStatus() == true)
     {
 
-        MacUILib_printf("\nGame Ended by Player");
+        MacUILib_printf("\nGame ended by player!");
         MacUILib_Delay(LOOP_DELAY); 
     }
 

@@ -14,15 +14,21 @@ class GameMechs;
 class Food
 {
     private:
-        objPos foodPos;
+        objPosArrayList* foodBucket;
         GameMechs* mainGameMechsRef;
 
     public:
         
         Food(GameMechs* thisGMRef);
         ~Food(); 
-        void generateFood(objPosArrayList& blockOff);
-        objPos getFoodPos() const;
+
+        Food &operator=(const Food &copy);
+        Food(const Food &copy);
+
+        void generateFood(objPosArrayList* blockOff);
+		objPosArrayList* getFoodPos() const;
+
+
         
         
 };

@@ -54,7 +54,7 @@ class GameMechs
         int getScore() const;
         void setScore(int newScore);
         void incrementScore();
-        void decrementScore();
+        void SpecialFoodScore();
         
 
         

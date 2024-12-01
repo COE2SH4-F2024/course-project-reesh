@@ -67,7 +67,8 @@ void Player::updatePlayerDir()
         }         
 }
 
-void Player::updatePlayerSpeed() {
+void Player::updatePlayerSpeed() 
+{
     char input = mainGameMechsRef->getInput();
     switch (input) {
         case '+': 
@@ -82,7 +83,7 @@ void Player::updatePlayerSpeed() {
 }
 
 
-void Player::movePlayer()
+objPos Player::newHeadpos()
 {
     //x-y coors for head
    
@@ -133,28 +134,87 @@ void Player::movePlayer()
 
 
     }
-    objPos Hnew(Hx,Hy,'@');
-    
+    return objPos(Hx,Hy,'@');
+}
 
-    if (Hnew.pos->x == mainFoodRef->getFoodPos().pos->x &&
-        Hnew.pos->y == mainFoodRef->getFoodPos().pos->y){
-            playerPosList->insertHead(Hnew);
-            mainFoodRef->generateFood(*playerPosList);
-        
+
+
+bool Player::checkfoodCollision(const objPos& newHead) 
+{
+    objPosArrayList* foodList = mainFoodRef->getFoodPos();
+    bool ateFood = false;  
+
+    for (int i = 0; i < foodList->getSize(); i++) {
+        objPos food = foodList->getElement(i);
+        if (newHead.pos->x == food.pos->x && newHead.pos->y == food.pos->y) {
+            ateFood = true;
+            if (food.symbol == '$') {
+                mainGameMechsRef->SpecialFoodScore();
+            } 
+            else if (food.symbol == 'O') {
+                mainGameMechsRef->incrementScore();
+            }
+            mainFoodRef->generateFood(playerPosList); 
+            break;  
+        }
     }
-    else {
-        playerPosList->insertHead(Hnew);
-        playerPosList->removeTail();
+    return ateFood;
+}
+
+bool Player::checkSelfCollision() {
+    objPos headPos = playerPosList->getHeadElement();
+    int Hx = headPos.pos->x;
+    int Hy = headPos.pos->y;
+
+    //3C
+
+    for (int i = 1; i < playerPosList->getSize(); i++) {
+        objPos body = playerPosList->getElement(i);
+        int Bx = body.pos->x;
+        int By = body.pos->y;
+
+        // If the head collides with any part of the body, end the game
+        if (Hx == Bx && Hy == By) {
+            mainGameMechsRef->setExitTrue();
+            mainGameMechsRef->setLoseFlag();
+            return true;  
+        }
+    }
+    return false;  
+}
+
+
+void Player::afterEating(const objPos& newHead, bool ateFood) 
+{
+    if (ateFood) {
+        playerPosList->insertHead(newHead); 
+        mainFoodRef->generateFood(playerPosList); 
+    } else {
+        playerPosList->insertHead(newHead);  
+        playerPosList->removeTail();  
     }
 
     int snakeSize = playerPosList->getSize();
-
-        if (snakeSize > 0){
-            mainGameMechsRef->setScore(snakeSize - 1);
+    if (snakeSize > 0){
+        mainGameMechsRef->setScore(mainGameMechsRef->getScore());
         }
-        else{
-            mainGameMechsRef->setScore(0);
+    else{
+        mainGameMechsRef->setScore(0);
         }
 }
 
-// More methods to be added
+
+
+
+void Player::movePlayer() 
+{
+    updatePlayerDir();
+    objPos newHead = newHeadpos();
+    bool ateFood = checkfoodCollision(newHead); 
+    afterEating(newHead, ateFood);
+    if (checkSelfCollision()) {
+        return;
+    }
+}
+
+    

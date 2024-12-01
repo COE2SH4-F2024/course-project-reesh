@@ -70,10 +70,6 @@ void GameMechs::incrementScore()
     score++;
 }
 
-void GameMechs::decrementScore()
-{
-    score--;
-}
 
 int GameMechs::getBoardSizeX() const
 {
@@ -155,4 +151,8 @@ void GameMechs::clearInput()
     input=0;
 }
 
-// More methods should be added here
+void GameMechs::SpecialFoodScore()
+{
+    score += 10;
+}
+

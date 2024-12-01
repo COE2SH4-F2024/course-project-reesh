@@ -32,6 +32,13 @@ class Player
 
         // More methods to be added here
         void updatePlayerSpeed();
+        objPos newHeadpos();
+        bool checkSelfCollision();
+        bool checkfoodCollision(const objPos& newHead);
+
+        void afterEating(const objPos& newHead, bool ateFood);
+
+
 
 
     private:
