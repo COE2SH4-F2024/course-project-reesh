@@ -135,7 +135,19 @@ void Player::movePlayer()
     }
     objPos Hnew(Hx,Hy,'@');
     
+    //3C
+    for (int i=1; i < playerPosList->getSize(); i++){
+        objPos body = playerPosList->getElement(i);
+        int Bx= body.pos->x;
+        int By= body.pos->y;
 
+        if (Hx==Bx && Hy==By){
+            mainGameMechsRef->setExitTrue();
+            mainGameMechsRef->setLoseFlag();
+        }
+
+    }
+    //3C
     if (Hnew.pos->x == mainFoodRef->getFoodPos().pos->x &&
         Hnew.pos->y == mainFoodRef->getFoodPos().pos->y){
             playerPosList->insertHead(Hnew);
