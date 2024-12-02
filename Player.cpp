@@ -8,11 +8,10 @@ Player::Player(GameMechs* thisGMRef, Food* thisFoodRef)
     myDir = STOP;
 
     playerPosList = new objPosArrayList();
-    // more actions to be included
+   
+   //HPos will begin the game with '@' in middle of game board and insert it as the "head" of the snake/playerPosList
     objPos HPos(mainGameMechsRef->getBoardSizeX()/2, mainGameMechsRef->getBoardSizeY()/2, '@'); 
-    // // playerPos.pos->y= mainGameMechsRef->getBoardSizeY()/2;
-    // // playerPos.symbol= '@';
-    playerPosList->insertHead(HPos);//MAKE SURE THIS LINE IS RIGHT
+    playerPosList->insertHead(HPos);
 
 
 }
@@ -20,8 +19,8 @@ Player::Player(GameMechs* thisGMRef, Food* thisFoodRef)
 
 Player::~Player()
 {
-    // delete any heap members here
-    //didnt say new anywhere for now 
+    // delete heap members here
+
     delete playerPosList;
 }
 
@@ -34,7 +33,7 @@ objPosArrayList* Player::getPlayerPos() const
 void Player::updatePlayerDir()
 {
     char input = mainGameMechsRef->getInput();
-        // PPA3 input processing logic 
+        // wasd input processing logic for updating direction
         switch(input)
         {            
             case 'w':
@@ -85,15 +84,13 @@ void Player::updatePlayerSpeed()
 
 objPos Player::newHeadpos()
 {
-    //x-y coors for head
-   
-    //char Hsym= playerPosList->getHeadElement().getSymbol();
-
+    //tracks head element 
     objPos playerPos= playerPosList->getHeadElement();
+
     //x-y coors for head
     int Hx= playerPos.pos->x;
     int Hy= playerPos.pos->y;
-    // PPA3 Finite State Machine logic
+    // Finite State Machine and wrap around logic
     updatePlayerDir();
     switch (myDir)
     {
@@ -127,13 +124,12 @@ objPos Player::newHeadpos()
 
         default:
             // When an invalid input is entered
-            myDir = STOP; // Set direction to STOP
-           // playerPos.pos->x = 11; // Reset player position to (11, 5)
-            //playerPos.pos->y = 5;
+            myDir = STOP; //Set direction to STOP (0)
             break;
 
 
     }
+    //Updates head position
     return objPos(Hx,Hy,'@');
 }
 
@@ -141,6 +137,7 @@ objPos Player::newHeadpos()
 
 bool Player::checkfoodCollision(const objPos& newHead) 
 {
+    //Impliments score actions for specific food collisions and generates new food after every collision 
     objPosArrayList* foodList = mainFoodRef->getFoodPos();
     bool ateFood = false;  
 
@@ -162,12 +159,12 @@ bool Player::checkfoodCollision(const objPos& newHead)
 }
 
 bool Player::checkSelfCollision() {
+
     objPos headPos = playerPosList->getHeadElement();
     int Hx = headPos.pos->x;
     int Hy = headPos.pos->y;
 
-    //3C
-
+//Iterate through snake size
     for (int i = 1; i < playerPosList->getSize(); i++) {
         objPos body = playerPosList->getElement(i);
         int Bx = body.pos->x;
@@ -186,10 +183,12 @@ bool Player::checkSelfCollision() {
 
 void Player::afterEating(const objPos& newHead, bool ateFood) 
 {
+    //impliments body growth and score updates
     if (ateFood) {
         playerPosList->insertHead(newHead); 
         mainFoodRef->generateFood(playerPosList); 
-    } else {
+    } 
+    else {
         playerPosList->insertHead(newHead);  
         playerPosList->removeTail();  
     }
@@ -208,6 +207,7 @@ void Player::afterEating(const objPos& newHead, bool ateFood)
 
 void Player::movePlayer() 
 {
+    //Implements game player methods to move player accordingly
     updatePlayerDir();
     objPos newHead = newHeadpos();
     bool ateFood = checkfoodCollision(newHead); 

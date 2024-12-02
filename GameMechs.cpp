@@ -4,6 +4,7 @@
 
 GameMechs::GameMechs()
 {
+    //Initialize game control variables
     input=0;
     exitFlag=false;
     loseFlag=false;
@@ -31,10 +32,7 @@ GameMechs::GameMechs(int boardX, int boardY)
     
 }
 
-// do you need a destructor?
-GameMechs::~GameMechs()
-{
-}
+//removed ~Game destructor, no heap allocations in this class
 
 bool GameMechs::getExitFlagStatus() const
 {

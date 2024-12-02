@@ -31,8 +31,8 @@ void objPosArrayList::insertHead(objPos thisPos)
         aList[i] = aList[i - 1];
     }
     
-    aList[0] = thisPos;//make new head at the beginning
-    listSize++;//increase list size because we have a new element
+    aList[0] = thisPos;//put new head at the beginning
+    listSize++;//increase list size, added a new element
 }
 
 void objPosArrayList::insertTail(objPos thisPos)
@@ -42,6 +42,7 @@ void objPosArrayList::insertTail(objPos thisPos)
         return;
     }
 
+    //insert tail at last index position and increase the size
     aList[listSize] = thisPos;
     listSize++;
 }
@@ -53,11 +54,11 @@ void objPosArrayList::removeHead()
         return;
     }
 
-    for(int i = 0; i < listSize; i++)
+    for(int i = 0; i < listSize; i++)//shift all elements to the left
     {
         aList[i] = aList[i + 1];
     }
-    listSize--;
+    listSize--;//decrease list size, removed an element
 }
 
 void objPosArrayList::removeTail()
@@ -66,6 +67,7 @@ void objPosArrayList::removeTail()
     {
         return;
     }
+    //gets rid of last element
         listSize--;
 }
 

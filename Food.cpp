@@ -48,6 +48,8 @@ void Food::generateFood(objPosArrayList* blockOff)
     int xRange = mainGameMechsRef->getBoardSizeX() - 2;
     int yRange = mainGameMechsRef->getBoardSizeY() - 2;
 
+    //Implements random food generation at empty positions within game boarders
+
     int spFoodcount = rand() % 2 + 1;  // Randomly choose 1 or 2 items to be '$'
     
     for (checkIndex = foodBucket->getSize(); checkIndex > 0; checkIndex--)
@@ -69,6 +71,7 @@ void Food::generateFood(objPosArrayList* blockOff)
                 }
             }
 
+            // Check agasint other generated food positions
             for (int checkI = 0; checkI < foodBucket->getSize(); checkI++) {
                 objPos genFoodPos = foodBucket->getElement(checkI);
                 if (genFoodPos.pos->x == randX && genFoodPos.pos->y == randY) {
@@ -86,6 +89,7 @@ void Food::generateFood(objPosArrayList* blockOff)
             foodBucket->insertTail(objPos(randX, randY, 'O')); 
         }
 
+        //incremented so 5 foods are on the board
         genCount++;  
     }
 

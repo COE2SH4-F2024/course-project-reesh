@@ -13,7 +13,9 @@ using namespace std;
 const int LOOP_DELAY = 3000000; 
 int i,j,p;
 char input;
-Player *myPlayer;//pointer to a Player object
+
+//Pointers to Class objects
+Player *myPlayer;
 GameMechs *myGM;
 Food *food;
 
@@ -50,6 +52,7 @@ void Initialize(void)
     MacUILib_init();
     MacUILib_clearScreen();
 
+    //Allocating objects on the heap
     myGM = new GameMechs();
     food = new Food(myGM);
     myPlayer = new Player(myGM,food);
@@ -79,6 +82,7 @@ void RunLogic(void)
     
     input = myGM->getInput();
 
+    //switch case to control player speed and exit based on input
     switch (input) {
         case '+':
         case '-':
@@ -92,6 +96,8 @@ void RunLogic(void)
         default:
             break;  // Default case if no match is found (optional)
     }
+
+    //accesses methods in Player class to process inputs for direction and moves player accordingly
         myPlayer->updatePlayerDir();  
         myPlayer->movePlayer(); 
     
@@ -110,8 +116,9 @@ void DrawScreen(void)
     int boardX=myGM-> getBoardSizeX();
     int boardY=myGM-> getBoardSizeY();
     
-    objPosArrayList* snake = myPlayer->getPlayerPos();//3A, "snake" is playerPosList, just initated with a new name here
-    int snakesize = snake->getSize();//3A
+    //assigning pointers to getter methods for Player and Food class, and getting their size
+    objPosArrayList* snake = myPlayer->getPlayerPos();
+    int snakesize = snake->getSize();
 
     objPosArrayList* foodPosList = food->getFoodPos();
     int foodListSize = foodPosList->getSize();
@@ -119,9 +126,9 @@ void DrawScreen(void)
     
     for (i=0; i<boardY; i++){
         for (j=0; j<boardX; j++){
-             int isSnake=0;
+             int isSnake=0; //flag to check if the position on board is a snake body symbol 
 
-//forloop just for snake printing-3A
+//forloopfor snake/playerPosList printing
             for(int k=0; k<snakesize; k++){
                 objPos Bodypart = snake->getElement(k);
 
@@ -132,7 +139,7 @@ void DrawScreen(void)
                     break;
                 }
             }
-//back to normal printing where its not a snake part-3A
+//back to normal printing boarder, blank spaces, and food where its not a snake part
             if (!isSnake)
             {
                 if (i==0|| i==boardY-1|| j==0|| j==boardX-1){
@@ -163,7 +170,7 @@ void DrawScreen(void)
     
     MacUILib_printf("\nCurrent score: %d\n", myGM->getScore());
 
-           
+    //print speed player-directions     
     switch (myGM->getGameSpeed()) {
         case GameMechs::VERY_SLOW:
             MacUILib_printf("Speed Level: Very Slow (enter '+' to increase, '-' to decrease)\n");
@@ -185,7 +192,7 @@ void DrawScreen(void)
     }
 
             
-
+    //print situational exit messages (forced or lost)
     if (myGM->getLoseFlagStatus()==true && myGM->getExitFlagStatus() == true) {
         MacUILib_printf("\nOops, you lost the game! :( \nTry again, you can do it! :)");
         MacUILib_Delay(LOOP_DELAY); 
@@ -214,6 +221,7 @@ void CleanUp(void)
 {
     MacUILib_clearScreen();    
 
+    //deleting memory on the heap
     delete myPlayer;
     myPlayer = nullptr;
 
