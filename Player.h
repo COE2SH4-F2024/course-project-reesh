@@ -7,7 +7,6 @@
 #include "objPos.h"
 #include "objPosArrayList.h"
 
-using namespace std;
 class GameMechs;
 class Food;
 

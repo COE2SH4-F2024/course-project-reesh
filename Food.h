@@ -9,7 +9,6 @@
 #include "objPosArrayList.h"
 
 
-using namespace std;
 class GameMechs;
 class Food
 {

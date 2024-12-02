@@ -146,13 +146,4 @@ void GameMechs::setInput(char this_input)
     input=this_input;
 }
 
-void GameMechs::clearInput()
-{
-    input=0;
-}
-
-void GameMechs::SpecialFoodScore()
-{
-    score += 10;
-}
-
+void GameMechs
