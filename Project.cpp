@@ -206,4 +206,22 @@ void DrawScreen(void)
 
 void LoopDelay(void)
 {
-    MacUILib_Delay(myGM->g
+    MacUILib_Delay(myGM->getDelay());
+    
+}
+
+void CleanUp(void)
+{
+    MacUILib_clearScreen();    
+
+    delete myPlayer;
+    myPlayer = nullptr;
+
+    delete food;
+    food = nullptr;
+
+    delete myGM;
+    myGM = nullptr;
+
+    MacUILib_uninit();
+}
